@@ -1,10 +1,11 @@
-import { Get, Post, Put, Patch, Delete } from '@nestjs/common';
+import { Body, Get, Post, Put, Patch, Delete } from '@nestjs/common';
 import { Controller, Param } from '@nestjs/common';
 import { ParseIntPipe, UseInterceptors } from '@nestjs/common';
 import { CatsService } from './cats.service';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
 import { PositiveIntPipe } from 'src/common/pipes/positiveInt.pipe';
 // import { ApiOperation } from '@nestjs/swagger';
+import { Cat } from './cats.entity';
 
 @Controller('cats')
 @UseInterceptors(SuccessInterceptor)
@@ -14,49 +15,32 @@ export class CatsController {
   // cats/
   @Get()
   // @UseFilters(HttpExceptionFilter) //개별로 exception filter를 적용시킴
-  getAllCat() {
+  getAllCat(): Promise<Cat[]> {
     console.log('Hello Controller');
-    return this.catsService.readAllCat();
-  }
-
-  @Post()
-  createCat() {
-    return 'create cat';
+    return this.catsService.findAll();
   }
 
   @Get(':id')
-  getOneCat(@Param('id', ParseIntPipe, PositiveIntPipe) param: number) {
+  getOneCat(@Param('id', ParseIntPipe, PositiveIntPipe) id: number) {
     // console.log(param);
     // console.log(typeof param);
-    return this.catsService.readCat();
+    return this.catsService.findOne(id);
+  }
+
+  @Post()
+  createCat(@Body() cat: Cat) {
+    return this.catsService.create(cat);
   }
 
   @Put(':id')
-  updateCat(@Param('id') param: number) {
-    console.log(param);
-    console.log(typeof param);
-    return this.catsService.updateCat();
-  }
-
-  @Patch(':id')
-  updateParticalCat() {
-    return this.catsService.updateCat();
+  updateCat(@Param('id') id: number, @Body() cat: Cat) {
+    console.log(id);
+    console.log(typeof id);
+    return this.catsService.update(id, cat);
   }
 
   @Delete(':id')
-  deleteCat() {
-    return this.catsService.deleteCat();
+  deleteCat(@Param('id') id: number) {
+    return this.catsService.remove(id);
   }
-
-  // @ApiOperation({ summary: '로그인' })
-  // @Post('login')
-  // login() {
-  //   return 'login';
-  // }
-
-  // @ApiOperation({ summary: '로그아웃' })
-  // @Post('login')
-  // logOut() {
-  //   return 'log out';
-  // }
 }

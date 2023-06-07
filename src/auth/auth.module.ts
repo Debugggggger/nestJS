@@ -14,6 +14,6 @@ import { CatsModule } from 'src/cats/cats.module';
     }),
     CatsModule,
   ],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService],
 })
 export class AuthModule {}
