@@ -16,6 +16,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const error = exception.getResponse() as
       | string
       | { error: string; statusCode: number; message: string | string[] };
+    console.log('1');
     if (typeof error === 'string') {
       response.status(status).json({
         success: false,
@@ -30,12 +31,13 @@ export class HttpExceptionFilter implements ExceptionFilter {
         ...error,
       });
     }
-
-    response.status(status).json({
-      statusCode: false,
-      timestamp: new Date().toISOString(),
-      path: request.url,
-      error,
-    });
+    console.log('2');
+    // response.status(status).json({
+    //   statusCode: false,
+    //   timestamp: new Date().toISOString(),
+    //   path: request.url,
+    //   error,
+    // });
+    console.log('3');
   }
 }

@@ -12,6 +12,9 @@ export class User {
   password: string;
 
   @Column()
+  public name: string;
+
+  @Column({ unique: true })
   email: string;
 
   @Column({ default: 'default' })
